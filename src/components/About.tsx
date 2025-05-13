@@ -22,13 +22,13 @@ const About = () => {
           <div className="md:w-1/2">
             <div className="relative">
               <img 
-                src="https://images.unsplash.com/photo-1721322800607-8c38375eef04?auto=format&fit=crop&q=80&w=600" 
+                src="/lovable-uploads/Gemini_Generated_Image_px0645px0645px06.png" 
                 alt="VFS Castanhas e Doces" 
                 className="rounded-lg shadow-xl w-full"
               />
               <div className="absolute -bottom-8 -right-8 hidden md:block">
                 <div className="bg-vfs-sand p-4 md:p-6 rounded-lg shadow-lg animate-float">
-                  <p className="text-xl font-serif font-medium text-vfs-brown">Desde 2015</p>
+                  <p className="text-xl font-serif font-medium text-vfs-brown">Atacado e Varejo</p>
                 </div>
               </div>
             </div>
