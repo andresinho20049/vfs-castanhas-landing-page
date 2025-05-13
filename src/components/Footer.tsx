@@ -23,7 +23,7 @@ const Footer = () => {
               <span className="text-vfs-sand"> Castanhas & Doces</span>
             </h3>
             <p className="text-gray-400 mb-6">
-              Saboreie nossos produtos artesanais em frente à orla de Itanhaém. Castanhas, doces e muito mais.
+              Saboreie nossos produtos artesanais em Itanhaém. Castanhas, doces e muito mais.
             </p>
             <div className="flex space-x-4">
               <a href="#" aria-label="Facebook" className="text-gray-400 hover:text-white">
@@ -65,15 +65,15 @@ const Footer = () => {
             <ul className="space-y-4">
               <li className="flex justify-between">
                 <span className="text-gray-400">Segunda à Sexta</span>
-                <span>11:00 - 22:00</span>
+                <span>7:00 - 22:00</span>
               </li>
               <li className="flex justify-between">
                 <span className="text-gray-400">Sábados</span>
-                <span>10:00 - 23:00</span>
+                <span>7:00 - 22:00</span>
               </li>
               <li className="flex justify-between">
                 <span className="text-gray-400">Domingos e Feriados</span>
-                <span>10:00 - 22:00</span>
+                <span>7:00 - 22:00</span>
               </li>
             </ul>
           </div>

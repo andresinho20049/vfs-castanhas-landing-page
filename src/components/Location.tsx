@@ -5,13 +5,13 @@ import { Button } from '@/components/ui/button';
 
 const Location = () => {
   const openingHours = [
-    { day: 'Segunda à Sexta', hours: '11:00 - 22:00' },
-    { day: 'Sábados', hours: '10:00 - 23:00' },
-    { day: 'Domingos e Feriados', hours: '10:00 - 22:00' }
+    { day: 'Segunda à Sexta', hours: '7:00 - 22:00' },
+    { day: 'Sábados', hours: '7:00 - 22:00' },
+    { day: 'Domingos e Feriados', hours: '7:00 - 22:00' }
   ];
 
   const openGoogleMaps = () => {
-    window.open('https://maps.google.com/?q=VFS+Castanhas+e+Doces+Itanhaém', '_blank');
+    window.open('https://maps.google.com/?q=R.+José+Plácido+de+Medeiros,+27+-+Jardim+Jamaica,+Itanhaém+-+SP,+11754-040', '_blank');
   };
 
   return (
@@ -21,7 +21,7 @@ const Location = () => {
           <h2 className="text-3xl md:text-4xl font-serif font-bold text-vfs-blue mb-4">Localização</h2>
           <div className="w-20 h-1 bg-vfs-sand mx-auto mb-6"></div>
           <p className="max-w-2xl mx-auto text-gray-600">
-            Estamos localizados em frente à orla de Itanhaém, com uma vista privilegiada para o mar
+            Estamos localizados em Jardim Jamaica, Itanhaém, com fácil acesso e ambiente aconchegante
           </p>
         </div>
 
@@ -50,9 +50,9 @@ const Location = () => {
                   <MapPin className="mr-4 h-6 w-6 text-vfs-blue flex-shrink-0 mt-1" />
                   <div>
                     <h4 className="font-medium text-lg mb-1">Endereço</h4>
-                    <p className="text-gray-700">Av. Governador Mário Covas Júnior, 1000</p>
-                    <p className="text-gray-700">Orla da Praia - Itanhaém, SP</p>
-                    <p className="text-gray-700">CEP: 11740-000</p>
+                    <p className="text-gray-700">R. José Plácido de Medeiros, 27</p>
+                    <p className="text-gray-700">Jardim Jamaica - Itanhaém, SP</p>
+                    <p className="text-gray-700">CEP: 11754-040</p>
                   </div>
                 </div>
                 
@@ -74,8 +74,7 @@ const Location = () => {
                   <Phone className="mr-4 h-6 w-6 text-vfs-blue flex-shrink-0 mt-1" />
                   <div>
                     <h4 className="font-medium text-lg mb-1">Contato</h4>
-                    <p className="text-gray-700">Telefone: (13) 1234-5678</p>
-                    <p className="text-gray-700">WhatsApp: (13) 98765-4321</p>
+                    <p className="text-gray-700">WhatsApp: (13) 99790-7864</p>
                     <p className="text-gray-700">Email: contato@vfscastanhas.com.br</p>
                   </div>
                 </div>
