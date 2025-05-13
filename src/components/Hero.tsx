@@ -15,6 +15,14 @@ const Hero = () => {
       
       <div className="container mx-auto px-4 text-center relative z-10">
         <div className="max-w-3xl mx-auto">
+          <div className="flex justify-center mb-6">
+            <img 
+              src="/lovable-uploads/dd52ac67-cefc-4e4d-805a-004df220a65a.png" 
+              alt="VFS Castanhas e Doces Logo" 
+              className="h-24 w-auto animate-float" 
+            />
+          </div>
+          
           <h1 className="text-4xl md:text-6xl font-serif font-bold text-white mb-6 drop-shadow-lg">
             Sabores que Encantam à Beira-Mar
           </h1>

@@ -42,9 +42,16 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
         <div className="flex items-center">
-          <a href="#home" className="text-2xl md:text-3xl font-serif font-bold">
-            <span className="text-vfs-blue">VFS</span> 
-            <span className="text-vfs-brown"> Castanhas & Doces</span>
+          <a href="#home" className="flex items-center">
+            <img 
+              src="/lovable-uploads/dd52ac67-cefc-4e4d-805a-004df220a65a.png" 
+              alt="VFS Castanhas e Doces Logo" 
+              className="h-12 w-auto mr-2" 
+            />
+            <span className="text-2xl md:text-3xl font-serif font-bold">
+              <span className="text-vfs-blue">VFS</span> 
+              <span className={`${isScrolled ? 'text-vfs-brown' : 'text-white'} transition-colors duration-300`}> Castanhas & Doces</span>
+            </span>
           </a>
         </div>
 

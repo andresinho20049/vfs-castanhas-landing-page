@@ -7,7 +7,14 @@ const About = () => {
     <section id="about" className="py-16 md:py-24 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-vfs-blue mb-4">Nossa História</h2>
+          <div className="flex justify-center items-center gap-3 mb-4">
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-vfs-blue">Nossa História</h2>
+            <img 
+              src="/lovable-uploads/dd52ac67-cefc-4e4d-805a-004df220a65a.png" 
+              alt="VFS Logo" 
+              className="h-10 w-auto opacity-80" 
+            />
+          </div>
           <div className="w-20 h-1 bg-vfs-sand mx-auto"></div>
         </div>
 
@@ -50,12 +57,19 @@ const About = () => {
               </p>
             </div>
             
-            <Button 
-              className="mt-8 bg-vfs-brown hover:bg-vfs-brown/80 text-white"
-              onClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              Conheça Nossos Produtos
-            </Button>
+            <div className="flex items-center mt-8">
+              <Button 
+                className="bg-vfs-brown hover:bg-vfs-brown/80 text-white mr-4"
+                onClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })}
+              >
+                Conheça Nossos Produtos
+              </Button>
+              <img 
+                src="/lovable-uploads/dd52ac67-cefc-4e4d-805a-004df220a65a.png" 
+                alt="VFS Logo" 
+                className="h-10 w-auto opacity-70" 
+              />
+            </div>
           </div>
         </div>
       </div>
