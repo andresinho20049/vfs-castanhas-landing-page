@@ -8,10 +8,11 @@ const Hero = () => {
       id="home"
       className="relative h-screen flex items-center justify-center bg-cover bg-center"
       style={{ 
-        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&q=80&w=1920')` 
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4)), url('public/lovable-uploads/1008ce79-9d2d-4ecb-8815-cf1ad06219f9.png')`,
+        backdropFilter: 'blur(2px)'
       }}
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/30 backdrop-blur-sm" />
       
       <div className="container mx-auto px-4 text-center relative z-10">
         <div className="max-w-3xl mx-auto">
@@ -40,7 +41,7 @@ const Hero = () => {
             </Button>
             <Button 
               variant="outline" 
-              className="border-white text-white hover:bg-white/20 px-8 py-6 text-lg"
+              className="border-white text-white hover:bg-white/20 px-8 py-6 text-lg font-medium bg-black/30 backdrop-blur-sm"
               onClick={() => document.getElementById('location')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Como Chegar
