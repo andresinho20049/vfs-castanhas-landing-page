@@ -60,7 +60,7 @@ const Location = () => {
                   <div>
                     <h4 className="font-medium text-lg mb-1">Contato</h4>
                     <p className="text-gray-700">WhatsApp: (13) 99790-7864</p>
-                    <p className="text-gray-700">Email: contato@vfscastanhas.com.br</p>
+                    {/* <p className="text-gray-700">Email: contato@vfscastanhas.com.br</p> */}
                   </div>
                 </div>
               </div>
