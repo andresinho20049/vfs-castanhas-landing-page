@@ -1,11 +1,24 @@
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, User, LogOut, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/contexts/AuthContext';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { user, isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,12 +39,17 @@ const Navbar = () => {
     setIsOpen(!isOpen);
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
   const navLinks = [
     { href: '#home', label: 'Início' },
     { href: '#about', label: 'Nossa História' },
     { href: '#products', label: 'Produtos' },
     { href: '#location', label: 'Localização' },
-    { href: '#contact', label: 'Contato' },
+    { href: '#comments', label: 'Comentários' },
   ];
 
   return (
@@ -68,16 +86,98 @@ const Navbar = () => {
               {link.label}
             </a>
           ))}
-          <Button 
-            className="bg-vfs-blue hover:bg-vfs-blue/80 text-white"
-            onClick={() => window.open('tel:+5513123456789')}
-          >
-            Contate-nos
-          </Button>
+          
+          {isAuthenticated ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                  <Avatar>
+                    <AvatarImage src={user?.avatarUrl} alt={user?.name} />
+                    <AvatarFallback className="bg-vfs-blue text-white">
+                      {user?.name?.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end">
+                <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
+                <DropdownMenuItem disabled className="opacity-70">
+                  {user?.name}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <User className="mr-2 h-4 w-4" />
+                  <span>Perfil</span>
+                </DropdownMenuItem>
+                {user?.isAdmin && (
+                  <DropdownMenuItem onClick={() => navigate('/console')}>
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>Console</span>
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Sair</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button 
+              className="bg-vfs-blue hover:bg-vfs-blue/80 text-white"
+              onClick={() => navigate('/login')}
+            >
+              Entrar
+            </Button>
+          )}
         </nav>
 
         {/* Mobile Menu Button */}
-        <div className="md:hidden">
+        <div className="md:hidden flex items-center">
+          {isAuthenticated ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild className="mr-2">
+                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                  <Avatar>
+                    <AvatarImage src={user?.avatarUrl} alt={user?.name} />
+                    <AvatarFallback className="bg-vfs-blue text-white text-xs">
+                      {user?.name?.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end">
+                <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
+                <DropdownMenuItem disabled className="opacity-70">
+                  {user?.name}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <User className="mr-2 h-4 w-4" />
+                  <span>Perfil</span>
+                </DropdownMenuItem>
+                {user?.isAdmin && (
+                  <DropdownMenuItem onClick={() => navigate('/console')}>
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>Console</span>
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Sair</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button 
+              className="bg-vfs-blue hover:bg-vfs-blue/80 text-white mr-2"
+              size="sm"
+              onClick={() => navigate('/login')}
+            >
+              Entrar
+            </Button>
+          )}
           <button
             onClick={toggleMenu}
             className={`p-2 focus:outline-none ${
@@ -104,12 +204,6 @@ const Navbar = () => {
                   {link.label}
                 </a>
               ))}
-              <Button 
-                className="bg-vfs-blue hover:bg-vfs-blue/80 text-white"
-                onClick={() => window.open('tel:+5513123456789')}
-              >
-                Contate-nos
-              </Button>
             </nav>
           </div>
         </div>
