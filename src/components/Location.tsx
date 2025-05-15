@@ -1,18 +1,12 @@
 
-import React from 'react';
-import { MapPin, Clock, Phone } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Clock, MapPin, Phone } from 'lucide-react';
 
 const Location = () => {
   const openingHours = [
-    { day: 'Segunda à Sexta', hours: '7:00 - 22:00' },
+    { day: 'Segunda à Sexta', hours: '8:00 - 20:00' },
     { day: 'Sábados', hours: '7:00 - 22:00' },
     { day: 'Domingos e Feriados', hours: '7:00 - 22:00' }
   ];
-
-  const openGoogleMaps = () => {
-    window.open('https://maps.google.com/?q=R.+José+Plácido+de+Medeiros,+27+-+Jardim+Jamaica,+Itanhaém+-+SP,+11754-040', '_blank');
-  };
 
   return (
     <section id="location" className="py-16 md:py-24 bg-white">
@@ -25,20 +19,9 @@ const Location = () => {
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-8">
-          <div className="lg:w-1/2">
-            <div className="rounded-lg overflow-hidden shadow-lg h-full">
-              {/* Placeholder para o mapa - em produção seria um iframe do Google Maps */}
-              <div className="bg-gray-300 h-full min-h-[300px] lg:min-h-[400px] flex items-center justify-center">
-                <Button 
-                  className="bg-vfs-blue hover:bg-vfs-blue/80"
-                  onClick={openGoogleMaps}
-                >
-                  <MapPin className="mr-2 h-5 w-5" />
-                  Abrir no Google Maps
-                </Button>
-              </div>
-            </div>
+        <div className="flex flex-col items-center justify-center lg:flex-row gap-8">
+          <div className="hidden md:flex lg:w-1/2">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d909.5898789545262!2d-46.8656172303573!3d-24.229201475678252!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94d02b1d6179684b%3A0xe6df4932cbecfa84!2sVFS%20Castanhas%20e%20Doces%20Atacado%20e%20Varejo!5e0!3m2!1sen!2sbr!4v1747330691964!5m2!1sen!2sbr" width="600" height="400" loading="lazy"></iframe>
           </div>
 
           <div className="lg:w-1/2">
@@ -71,7 +54,9 @@ const Location = () => {
                 </div>
                 
                 <div className="flex items-start">
+                  <a target='_blank' href="https://api.whatsapp.com/send?phone=5513997907864">
                   <Phone className="mr-4 h-6 w-6 text-vfs-blue flex-shrink-0 mt-1" />
+                  </a>
                   <div>
                     <h4 className="font-medium text-lg mb-1">Contato</h4>
                     <p className="text-gray-700">WhatsApp: (13) 99790-7864</p>
