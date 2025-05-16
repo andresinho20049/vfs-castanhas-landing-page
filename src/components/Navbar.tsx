@@ -49,7 +49,7 @@ const Navbar = () => {
     { href: '#about', label: 'Nossa História' },
     { href: '#products', label: 'Produtos' },
     { href: '#location', label: 'Localização' },
-    // { href: '#comments', label: 'Comentários' },
+    { href: '#comments', label: 'Comentários' },
   ];
 
   return (
@@ -124,7 +124,7 @@ const Navbar = () => {
             </DropdownMenu>
           ) : (
             <Button 
-              className="bg-vfs-blue hover:bg-vfs-blue/80 text-white hidden"
+              className="bg-vfs-blue hover:bg-vfs-blue/80 text-white"
               onClick={() => navigate('/login')}
             >
               Entrar
@@ -171,7 +171,7 @@ const Navbar = () => {
             </DropdownMenu>
           ) : (
             <Button 
-              className="bg-vfs-blue hover:bg-vfs-blue/80 text-white mr-2 hidden"
+              className="bg-vfs-blue hover:bg-vfs-blue/80 text-white mr-2"
               size="sm"
               onClick={() => navigate('/login')}
             >

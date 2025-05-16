@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { MessageSquare, User, Bold, Italic, List, Link, Image } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 
 // Tipo para os comentários
 interface Comment {
@@ -259,6 +260,15 @@ const Comments = () => {
               Seja o primeiro a comentar!
             </div>
           )}
+        </div>
+
+        <div>
+          <Alert variant="destructive" className="my-4">
+            <AlertTitle>Importante</AlertTitle>
+            <AlertDescription>
+              Comentários ficticios, essa seção é apenas para fins de demonstração. Os comentários publicados não são persistidos e serão perdidos ao atualizar a página.
+            </AlertDescription>
+          </Alert>
         </div>
       </div>
     </section>

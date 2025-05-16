@@ -18,6 +18,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 // Definição do tipo de produto
 interface Product {
@@ -178,6 +179,22 @@ const Console = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      <div>
+        <Alert variant="destructive" className="my-4 container mx-auto">
+          <AlertTitle>Importante</AlertTitle>
+          <AlertDescription>
+            Valores iniciais são apenas para demonstração. Para adicionar novos produtos, clique no botão "Adicionar Produto" e preencha os detalhes necessários.
+            <br />
+            Os produtos adicionados não são persistidos em um banco de dados real, portanto, ao atualizar a página, os dados serão perdidos.
+            <br />
+            <br />
+            <strong>  
+              Pagina apenas para fins de demonstração.
+            </strong>
+          </AlertDescription>
+        </Alert>
       </div>
 
       {/* Main Content */}
