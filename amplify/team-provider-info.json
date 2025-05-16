@@ -10,6 +10,11 @@
       "StackName": "amplify-vfscastanhaslandingp-dev-b81c8",
       "StackId": "arn:aws:cloudformation:us-east-1:039287066861:stack/amplify-vfscastanhaslandingp-dev-b81c8/db826920-31f9-11f0-842d-0e29bdd92d97",
       "AmplifyAppId": "d2crsg2ixs07i2"
+    },
+    "categories": {
+      "auth": {
+        "vfscastanhaslandingpf36c0dfe": {}
+      }
     }
   }
 }
