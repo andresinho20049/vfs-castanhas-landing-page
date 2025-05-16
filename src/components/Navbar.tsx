@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, User, LogOut, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   DropdownMenu,
@@ -13,11 +12,12 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useAuthenticator } from '@aws-amplify/ui-react';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, route, signOut } = useAuthenticator()
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-    logout();
+    signOut(user);
     navigate('/');
   };
 
@@ -87,14 +87,14 @@ const Navbar = () => {
             </a>
           ))}
           
-          {isAuthenticated ? (
+          {route == "authenticated" ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                   <Avatar>
-                    <AvatarImage src={user?.avatarUrl} alt={user?.name} />
+                    <AvatarImage src={user?.username} alt={user?.username} />
                     <AvatarFallback className="bg-vfs-blue text-white">
-                      {user?.name?.charAt(0).toUpperCase()}
+                      {user?.username?.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                 </Button>
@@ -102,14 +102,14 @@ const Navbar = () => {
               <DropdownMenuContent className="w-56" align="end">
                 <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
                 <DropdownMenuItem disabled className="opacity-70">
-                  {user?.name}
+                  {user?.username}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   <User className="mr-2 h-4 w-4" />
                   <span>Perfil</span>
                 </DropdownMenuItem>
-                {user?.isAdmin && (
+                {user?.userId && (
                   <DropdownMenuItem onClick={() => navigate('/console')}>
                     <Settings className="mr-2 h-4 w-4" />
                     <span>Console</span>
@@ -134,14 +134,14 @@ const Navbar = () => {
 
         {/* Mobile Menu Button */}
         <div className="md:hidden flex items-center">
-          {isAuthenticated ? (
+          {route == "authenticated" ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild className="mr-2">
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                   <Avatar>
-                    <AvatarImage src={user?.avatarUrl} alt={user?.name} />
+                    <AvatarImage src={user?.username} alt={user?.username} />
                     <AvatarFallback className="bg-vfs-blue text-white text-xs">
-                      {user?.name?.charAt(0).toUpperCase()}
+                      {user?.username?.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                 </Button>
@@ -149,14 +149,14 @@ const Navbar = () => {
               <DropdownMenuContent className="w-56" align="end">
                 <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
                 <DropdownMenuItem disabled className="opacity-70">
-                  {user?.name}
+                  {user?.username}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   <User className="mr-2 h-4 w-4" />
                   <span>Perfil</span>
                 </DropdownMenuItem>
-                {user?.isAdmin && (
+                {user?.userId && (
                   <DropdownMenuItem onClick={() => navigate('/console')}>
                     <Settings className="mr-2 h-4 w-4" />
                     <span>Console</span>

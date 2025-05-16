@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Plus, Edit, Trash2 } from 'lucide-react';
 import {
@@ -19,6 +18,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { useAuthenticator } from '@aws-amplify/ui-react';
 
 // Definição do tipo de produto
 interface Product {
@@ -48,7 +48,7 @@ const initialProducts: Product[] = [
 ];
 
 const Console = () => {
-  const { user } = useAuth();
+  const { user } = useAuthenticator()
   const navigate = useNavigate();
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -63,7 +63,7 @@ const Console = () => {
 
   // Redireciona se não for administrador
   React.useEffect(() => {
-    if (!user?.isAdmin) {
+    if (!user?.userId) {
       toast.error("Acesso restrito a administradores");
       navigate('/');
     }
@@ -148,7 +148,7 @@ const Console = () => {
     }
   };
 
-  if (!user?.isAdmin) {
+  if (!user?.userId) {
     return null; // Retorno nulo enquanto redireciona
   }
 
@@ -169,11 +169,11 @@ const Console = () => {
               <h1 className="text-3xl font-bold">Console Administrativo</h1>
             </div>
             <div className="flex items-center space-x-2">
-              <span className="text-sm">Olá, {user?.name}</span>
+              <span className="text-sm">Olá, {user?.username}</span>
               <Avatar>
-                <AvatarImage src={user?.avatarUrl} alt={user?.name} />
+                <AvatarImage src={user?.username} alt={user?.username} />
                 <AvatarFallback className="bg-vfs-brown text-white">
-                  {user?.name?.charAt(0).toUpperCase()}
+                  {user?.username?.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
             </div>

@@ -1,18 +1,20 @@
 
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { toast } from 'sonner';
+import { useAuthenticator } from '@aws-amplify/ui-react';
 import { ArrowLeft } from 'lucide-react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  
+  const { toSignIn } = useAuthenticator();
+
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -20,7 +22,7 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      await login(email, password);
+      toSignIn({ username: email, password });
       navigate('/');
     } catch (error) {
       toast.error('Erro ao fazer login. Verifique suas credenciais.');

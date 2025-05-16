@@ -1,12 +1,12 @@
 
 import React, { useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { MessageSquare, User, Bold, Italic, List, Link, Image } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
+import { useAuthenticator } from '@aws-amplify/ui-react';
 
 // Tipo para os comentários
 interface Comment {
@@ -60,7 +60,7 @@ const renderMarkdown = (text: string) => {
 };
 
 const Comments = () => {
-  const { user, isAuthenticated } = useAuth();
+  const { user, route } = useAuthenticator()
   const [comments, setComments] = useState<Comment[]>(initialComments);
   const [newComment, setNewComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -81,9 +81,9 @@ const Comments = () => {
     setTimeout(() => {
       const comment: Comment = {
         id: Date.now().toString(),
-        userId: user?.id || '',
-        userName: user?.name || 'Anônimo',
-        userAvatar: user?.avatarUrl,
+        userId: user?.userId || '',
+        userName: user?.username || 'Anônimo',
+        userAvatar: user?.username,
         content: newComment,
         createdAt: new Date()
       };
@@ -147,17 +147,17 @@ const Comments = () => {
         </div>
 
         {/* Comment Form */}
-        {isAuthenticated ? (
+        {route == "authenticated" ? (
           <div className="max-w-3xl mx-auto mb-12 bg-white p-6 rounded-lg shadow-sm">
             <div className="flex items-center space-x-3 mb-4">
               <Avatar>
-                <AvatarImage src={user?.avatarUrl} alt={user?.name} />
+                <AvatarImage src={user?.username} alt={user?.username} />
                 <AvatarFallback className="bg-vfs-blue text-white">
-                  {user?.name?.charAt(0).toUpperCase()}
+                  {user?.username?.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
               <div>
-                <p className="font-medium">{user?.name}</p>
+                <p className="font-medium">{user?.username}</p>
                 <p className="text-sm text-gray-500">Compartilhe sua experiência</p>
               </div>
             </div>

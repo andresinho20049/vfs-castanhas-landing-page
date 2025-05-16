@@ -1,35 +1,44 @@
-
-import { Toaster } from "@/components/ui/toaster";
+import { Authenticator, useAuthenticator } from "@aws-amplify/ui-react";
+import '@aws-amplify/ui-react/styles.css';
+import { Amplify } from "aws-amplify";
+import awsExports from "./aws-exports";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { TooltipProvider } from "./components/ui/tooltip";
+import { Toaster } from "./components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
-import Login from "./pages/Login";
 import Console from "./pages/Console";
 import NotFound from "./pages/NotFound";
-import { AuthProvider } from "./contexts/AuthContext";
 
-const queryClient = new QueryClient();
+Amplify.configure(awsExports);
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <AuthProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/console" element={<Console />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </AuthProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+export default function App() {
+    return (
+        <Authenticator.Provider>
+            <TooltipProvider>
+                <Toaster />
+                <Sonner />
+                <BrowserRouter>
+                    <Routes>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/login" element={<Authenticator socialProviders={["google"]}  loginMechanism="email" variation="modal" />} />
+                    <Route
+                        path="/admin"
+                        element={
+                            <ProtectedRoute roles={['admin']}>
+                                <Console />
+                            </ProtectedRoute>
+                        }
+                        />
+                    <Route path="*" element={<NotFound />} />
+                    </Routes>
+                </BrowserRouter>
+            </TooltipProvider>
+        </Authenticator.Provider>
+    );
+}
 
-export default App;
+const ProtectedRoute = ({ children, roles }) => {
+    const { user } = useAuthenticator();
+    return !!user ? children : <Navigate to="/" replace />;
+}
