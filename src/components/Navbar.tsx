@@ -94,7 +94,7 @@ const Navbar = () => {
                   <Avatar>
                     <AvatarImage src={user?.username} alt={user?.username} />
                     <AvatarFallback className="bg-vfs-blue text-white">
-                      {user?.username?.charAt(0).toUpperCase()}
+                      {user?.signInDetails.loginId?.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                 </Button>
@@ -102,7 +102,7 @@ const Navbar = () => {
               <DropdownMenuContent className="w-56" align="end">
                 <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
                 <DropdownMenuItem disabled className="opacity-70">
-                  {user?.username}
+                  {user?.signInDetails.loginId}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>

@@ -21,9 +21,9 @@ export default function App() {
                 <BrowserRouter>
                     <Routes>
                     <Route path="/" element={<Index />} />
-                    <Route path="/login" element={<Authenticator socialProviders={["google"]}  loginMechanism="email" variation="modal" />} />
+                    <Route path="/login" element={<Authenticator socialProviders={["google"]}  loginMechanism="email" variation="modal" children={<Navigate to="/" />} />} />
                     <Route
-                        path="/admin"
+                        path="/console"
                         element={
                             <ProtectedRoute roles={['admin']}>
                                 <Console />
