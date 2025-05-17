@@ -44,10 +44,24 @@
     "hostedUIDomainName": "vfs-castanhas-landing-page-andresinho20049",
     "authProvidersUserPool": [],
     "hostedUIProviderMeta": "[]",
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:8080/\",\"https://amplify.d2crsg2ixs07i2.amplifyapp.com/\"],\"LogoutURLs\":[\"http://localhost:8080/\",\"https://amplify.d2crsg2ixs07i2.amplifyapp.com/\"]}",
     "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
-    "useEnabledMfas": true
+    "useEnabledMfas": true,
+    "authRoleArn": {
+      "Fn::GetAtt": [
+        "AuthRole",
+        "Arn"
+      ]
+    },
+    "unauthRoleArn": {
+      "Fn::GetAtt": [
+        "UnauthRole",
+        "Arn"
+      ]
+    },
+    "breakCircularDependency": true,
+    "dependsOn": [],
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:8080/\",\"https://amplify.d2crsg2ixs07i2.amplifyapp.com/\"],\"LogoutURLs\":[\"http://localhost:8080/\",\"https://amplify.d2crsg2ixs07i2.amplifyapp.com/\"]}"
   }
 }
