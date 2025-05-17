@@ -1,24 +1,23 @@
-
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, Plus, Edit, Trash2 } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogClose,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { toast } from 'sonner';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { useAuthenticator } from '@aws-amplify/ui-react';
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { useAuth } from "@/context/AuthContext";
+import { ArrowLeft, Edit, Plus, Trash2 } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 // Definição do tipo de produto
 interface Product {
@@ -32,42 +31,44 @@ interface Product {
 // Mock de produtos iniciais
 const initialProducts: Product[] = [
   {
-    id: '1',
-    name: 'Castanha Especial',
-    description: 'Nossa castanha especial, torrada com temperos exclusivos.',
-    price: 25.90,
-    imageUrl: '/lovable-uploads/1008ce79-9d2d-4ecb-8815-cf1ad06219f9.png'
+    id: "1",
+    name: "Castanha Especial",
+    description: "Nossa castanha especial, torrada com temperos exclusivos.",
+    price: 25.9,
+    imageUrl: "/lovable-uploads/1008ce79-9d2d-4ecb-8815-cf1ad06219f9.png",
   },
   {
-    id: '2',
-    name: 'Mix de Castanhas Premium',
-    description: 'Uma seleção de castanhas premium, com cashew, pará e amêndoas.',
-    price: 32.50,
-    imageUrl: '/lovable-uploads/8730518e-7d07-4349-9919-7ea5da1fed49.png'
-  }
+    id: "2",
+    name: "Mix de Castanhas Premium",
+    description:
+      "Uma seleção de castanhas premium, com cashew, pará e amêndoas.",
+    price: 32.5,
+    imageUrl: "/lovable-uploads/8730518e-7d07-4349-9919-7ea5da1fed49.png",
+  },
 ];
 
 const Console = () => {
-  const { user } = useAuthenticator()
+  const { userInfo } = useAuth();
+
   const navigate = useNavigate();
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    price: '',
-    imageUrl: ''
+    name: "",
+    description: "",
+    price: "",
+    imageUrl: "",
   });
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   // Redireciona se não for administrador
-  React.useEffect(() => {
-    if (!user?.userId) {
+  useEffect(() => {
+    if (!userInfo) {
       toast.error("Acesso restrito a administradores");
-      navigate('/');
+      navigate("/");
     }
-  }, [user, navigate]);
+  }, [userInfo]);
 
   const handleOpenForm = (product?: Product) => {
     if (product) {
@@ -76,16 +77,16 @@ const Console = () => {
         name: product.name,
         description: product.description,
         price: product.price.toString(),
-        imageUrl: product.imageUrl || ''
+        imageUrl: product.imageUrl || "",
       });
       setImagePreview(product.imageUrl || null);
     } else {
       setCurrentProduct(null);
       setFormData({
-        name: '',
-        description: '',
-        price: '',
-        imageUrl: ''
+        name: "",
+        description: "",
+        price: "",
+        imageUrl: "",
       });
       setImagePreview(null);
     }
@@ -96,11 +97,13 @@ const Console = () => {
     setIsFormOpen(false);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
 
@@ -112,25 +115,27 @@ const Console = () => {
       setImagePreview(imageUrl);
       setFormData({
         ...formData,
-        imageUrl
+        imageUrl,
       });
     }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const newProduct: Product = {
       id: currentProduct?.id || Date.now().toString(),
       name: formData.name,
       description: formData.description,
       price: parseFloat(formData.price) || 0,
-      imageUrl: formData.imageUrl || imagePreview || undefined
+      imageUrl: formData.imageUrl || imagePreview || undefined,
     };
 
     if (currentProduct) {
       // Editar produto existente
-      setProducts(products.map(p => p.id === currentProduct.id ? newProduct : p));
+      setProducts(
+        products.map((p) => (p.id === currentProduct.id ? newProduct : p))
+      );
       toast.success(`Produto "${newProduct.name}" atualizado com sucesso!`);
     } else {
       // Adicionar novo produto
@@ -142,13 +147,13 @@ const Console = () => {
   };
 
   const handleDeleteProduct = (id: string) => {
-    if (confirm('Tem certeza que deseja excluir este produto?')) {
-      setProducts(products.filter(p => p.id !== id));
-      toast.success('Produto excluído com sucesso!');
+    if (confirm("Tem certeza que deseja excluir este produto?")) {
+      setProducts(products.filter((p) => p.id !== id));
+      toast.success("Produto excluído com sucesso!");
     }
   };
 
-  if (!user?.userId) {
+  if (!userInfo) {
     return null; // Retorno nulo enquanto redireciona
   }
 
@@ -159,21 +164,21 @@ const Console = () => {
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 className="text-white hover:bg-vfs-blue/60"
-                onClick={() => navigate('/')}
+                onClick={() => navigate("/")}
               >
                 <ArrowLeft size={20} className="mr-2" /> Voltar ao site
               </Button>
               <h1 className="text-3xl font-bold">Console Administrativo</h1>
             </div>
             <div className="flex items-center space-x-2">
-              <span className="text-sm">Olá, {user?.username}</span>
+              <span className="text-sm">Olá, {userInfo.email}</span>
               <Avatar>
-                <AvatarImage src={user?.username} alt={user?.username} />
+                <AvatarImage src={userInfo.picture} alt={userInfo.email} />
                 <AvatarFallback className="bg-vfs-brown text-white">
-                  {user?.username?.charAt(0).toUpperCase()}
+                  {userInfo.email?.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
             </div>
@@ -185,14 +190,15 @@ const Console = () => {
         <Alert variant="destructive" className="my-4 container mx-auto">
           <AlertTitle>Importante</AlertTitle>
           <AlertDescription>
-            Valores iniciais são apenas para demonstração. Para adicionar novos produtos, clique no botão "Adicionar Produto" e preencha os detalhes necessários.
+            Valores iniciais são apenas para demonstração. Para adicionar novos
+            produtos, clique no botão "Adicionar Produto" e preencha os detalhes
+            necessários.
             <br />
-            Os produtos adicionados não são persistidos em um banco de dados real, portanto, ao atualizar a página, os dados serão perdidos.
+            Os produtos adicionados não são persistidos em um banco de dados
+            real, portanto, ao atualizar a página, os dados serão perdidos.
             <br />
             <br />
-            <strong>  
-              Pagina apenas para fins de demonstração.
-            </strong>
+            <strong>Pagina apenas para fins de demonstração.</strong>
           </AlertDescription>
         </Alert>
       </div>
@@ -201,8 +207,10 @@ const Console = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow-md p-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-800">Catálogo de Produtos</h2>
-            <Button 
+            <h2 className="text-2xl font-bold text-gray-800">
+              Catálogo de Produtos
+            </h2>
+            <Button
               onClick={() => handleOpenForm()}
               className="bg-vfs-blue hover:bg-vfs-blue/80"
             >
@@ -227,8 +235,8 @@ const Console = () => {
                   <tr key={product.id} className="border-b hover:bg-gray-50">
                     <td className="p-4">
                       {product.imageUrl ? (
-                        <img 
-                          src={product.imageUrl} 
+                        <img
+                          src={product.imageUrl}
                           alt={product.name}
                           className="w-16 h-16 object-cover rounded"
                         />
@@ -239,19 +247,21 @@ const Console = () => {
                       )}
                     </td>
                     <td className="p-4 font-medium">{product.name}</td>
-                    <td className="p-4 text-gray-600 max-w-xs truncate">{product.description}</td>
+                    <td className="p-4 text-gray-600 max-w-xs truncate">
+                      {product.description}
+                    </td>
                     <td className="p-4">R$ {product.price.toFixed(2)}</td>
                     <td className="p-4 text-right">
-                      <Button 
-                        variant="ghost" 
+                      <Button
+                        variant="ghost"
                         size="sm"
                         className="text-amber-600 hover:text-amber-800 hover:bg-amber-50"
                         onClick={() => handleOpenForm(product)}
                       >
                         <Edit size={16} />
                       </Button>
-                      <Button 
-                        variant="ghost" 
+                      <Button
+                        variant="ghost"
                         size="sm"
                         className="text-red-600 hover:text-red-800 hover:bg-red-50 ml-1"
                         onClick={() => handleDeleteProduct(product.id)}
@@ -279,12 +289,12 @@ const Console = () => {
         <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>
             <DialogTitle>
-              {currentProduct ? 'Editar Produto' : 'Adicionar Novo Produto'}
+              {currentProduct ? "Editar Produto" : "Adicionar Novo Produto"}
             </DialogTitle>
             <DialogDescription>
-              {currentProduct 
-                ? 'Atualize as informações do produto abaixo.' 
-                : 'Preencha as informações para adicionar um novo produto.'}
+              {currentProduct
+                ? "Atualize as informações do produto abaixo."
+                : "Preencha as informações para adicionar um novo produto."}
             </DialogDescription>
           </DialogHeader>
 
@@ -300,7 +310,7 @@ const Console = () => {
                   required
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="description">Descrição</Label>
                 <Textarea
@@ -311,7 +321,7 @@ const Console = () => {
                   rows={3}
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="price">Preço (R$)</Label>
                 <Input
@@ -324,7 +334,7 @@ const Console = () => {
                   required
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="image">Imagem do Produto</Label>
                 <div className="flex items-start space-x-4">
@@ -340,8 +350,8 @@ const Console = () => {
                   </div>
                   {(imagePreview || formData.imageUrl) && (
                     <div>
-                      <img 
-                        src={imagePreview || formData.imageUrl} 
+                      <img
+                        src={imagePreview || formData.imageUrl}
                         alt="Preview"
                         className="h-20 w-20 object-cover rounded border"
                       />
@@ -353,10 +363,15 @@ const Console = () => {
 
             <DialogFooter>
               <DialogClose asChild>
-                <Button type="button" variant="outline">Cancelar</Button>
+                <Button type="button" variant="outline">
+                  Cancelar
+                </Button>
               </DialogClose>
-              <Button type="submit" className="bg-vfs-blue hover:bg-vfs-blue/80">
-                {currentProduct ? 'Atualizar Produto' : 'Cadastrar Produto'}
+              <Button
+                type="submit"
+                className="bg-vfs-blue hover:bg-vfs-blue/80"
+              >
+                {currentProduct ? "Atualizar Produto" : "Cadastrar Produto"}
               </Button>
             </DialogFooter>
           </form>
