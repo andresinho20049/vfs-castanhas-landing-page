@@ -41,9 +41,6 @@
     "usernameAttributes": [
       "email"
     ],
-    "hostedUIDomainName": "vfs-castanhas-landing-page-andresinho20049",
-    "authProvidersUserPool": [],
-    "hostedUIProviderMeta": "[]",
     "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
@@ -62,6 +59,10 @@
     },
     "breakCircularDependency": true,
     "dependsOn": [],
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:8080/\",\"https://amplify.d2crsg2ixs07i2.amplifyapp.com/\"],\"LogoutURLs\":[\"http://localhost:8080/\",\"https://amplify.d2crsg2ixs07i2.amplifyapp.com/\"]}"
+    "hostedUIDomainName": "vfscastanhaslandingp79905b1c-79905b1c",
+    "authProvidersUserPool": [],
+    "hostedUIProviderMeta": "[]",
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:8080/\"],\"LogoutURLs\":[\"http://localhost:8080/\"]}",
+    "authProviders": []
   }
 }
