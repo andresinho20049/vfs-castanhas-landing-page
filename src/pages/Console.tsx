@@ -15,9 +15,11 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/context/AuthContext";
 import { ArrowLeft, Edit, Plus, Trash2 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+
+import { get, post, put, del } from "aws-amplify/api";
 
 // Definição do tipo de produto
 interface Product {
@@ -28,30 +30,11 @@ interface Product {
   imageUrl?: string;
 }
 
-// Mock de produtos iniciais
-const initialProducts: Product[] = [
-  {
-    id: "1",
-    name: "Castanha Especial",
-    description: "Nossa castanha especial, torrada com temperos exclusivos.",
-    price: 25.9,
-    imageUrl: "/lovable-uploads/1008ce79-9d2d-4ecb-8815-cf1ad06219f9.png",
-  },
-  {
-    id: "2",
-    name: "Mix de Castanhas Premium",
-    description:
-      "Uma seleção de castanhas premium, com cashew, pará e amêndoas.",
-    price: 32.5,
-    imageUrl: "/lovable-uploads/8730518e-7d07-4349-9919-7ea5da1fed49.png",
-  },
-];
-
 const Console = () => {
   const { userInfo } = useAuth();
 
   const navigate = useNavigate();
-  const [products, setProducts] = useState<Product[]>(initialProducts);
+  const [products, setProducts] = useState<Product[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
   const [formData, setFormData] = useState({
@@ -62,13 +45,16 @@ const Console = () => {
   });
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-  // Redireciona se não for administrador
   useEffect(() => {
     if (!userInfo) {
       toast.error("Acesso restrito a administradores");
       navigate("/");
     }
   }, [userInfo]);
+
+  useEffect(() => {
+    handleGetAllProduct();
+  }, []);
 
   const handleOpenForm = (product?: Product) => {
     if (product) {
@@ -120,35 +106,95 @@ const Console = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
 
-    const newProduct: Product = {
-      id: currentProduct?.id || Date.now().toString(),
-      name: formData.name,
-      description: formData.description,
-      price: parseFloat(formData.price) || 0,
-      imageUrl: formData.imageUrl || imagePreview || undefined,
-    };
+      const newProduct: Product = {
+        id: currentProduct?.id || Date.now().toString(),
+        name: formData.name,
+        description: formData.description,
+        price: parseFloat(formData.price) || 0,
+        imageUrl: formData.imageUrl || imagePreview || undefined,
+      };
 
-    if (currentProduct) {
-      // Editar produto existente
-      setProducts(
-        products.map((p) => (p.id === currentProduct.id ? newProduct : p))
-      );
-      toast.success(`Produto "${newProduct.name}" atualizado com sucesso!`);
+      if (!!currentProduct) {
+        await handleUpdateProduct(newProduct);
+      } else {
+        await handlePostProduct(newProduct);
+      }
+      handleCloseForm();
+    },
+    [products, currentProduct, formData]
+  );
+
+  const handlePostProduct = async (newProduct: Product) => {
+    const postProduct = post({
+      apiName: "vfscastanhasapi01",
+      path: "/products",
+      options: {
+        body: { ...newProduct },
+      },
+    });
+
+    const res = await postProduct.response;
+    if (res.statusCode === 200) {
+      setProducts((prevProducts) => [...prevProducts, newProduct]);
+      toast.success(`Produto "${newProduct.name}" cadastrado com sucesso!`);
     } else {
-      // Adicionar novo produto
-      setProducts([...products, newProduct]);
-      toast.success(`Produto "${newProduct.name}" adicionado com sucesso!`);
+      toast.error("Erro ao adicionar produto");
     }
-
-    handleCloseForm();
   };
 
-  const handleDeleteProduct = (id: string) => {
+  const handleUpdateProduct = async (updatedProduct: Product) => {
+    const updateProduct = post({
+      apiName: "vfscastanhasapi01",
+      path: "/products",
+      options: {
+        body: { ...updatedProduct },
+      },
+    });
+
+    const res = await updateProduct.response;
+    if (res.statusCode === 200) {
+      setProducts((prevProducts) =>
+        prevProducts.map((p) =>
+          p.id === updatedProduct.id ? updatedProduct : p
+        )
+      );
+      toast.success(`Produto "${updatedProduct.name}" atualizado com sucesso!`);
+    } else {
+      toast.error("Erro ao atualizar produto");
+    }
+  };
+
+  const handleGetAllProduct = async () => {
+    const getProducts = get({
+      apiName: "vfscastanhasapi01",
+      path: "/products",
+    });
+
+    const res = await getProducts.response;
+    if (res.statusCode === 200) {
+      const body = res.body;
+      const data = await body.json();
+      setProducts(data as unknown as Product[]);
+      toast.success("Produtos carregados com sucesso!");
+    } else {
+      toast.error("Erro ao carregar produtos");
+    }
+  };
+
+  const handleDeleteProduct = async (id: string, name: string) => {
     if (confirm("Tem certeza que deseja excluir este produto?")) {
-      setProducts(products.filter((p) => p.id !== id));
+      const deleteProduct = del({
+        apiName: "vfscastanhasapi01",
+        path: `/products/object/${id}/${name}`,
+      });
+
+      await deleteProduct.response;
+      handleGetAllProduct();
+
       toast.success("Produto excluído com sucesso!");
     }
   };
@@ -184,23 +230,6 @@ const Console = () => {
             </div>
           </div>
         </div>
-      </div>
-
-      <div>
-        <Alert variant="destructive" className="my-4 container mx-auto">
-          <AlertTitle>Importante</AlertTitle>
-          <AlertDescription>
-            Valores iniciais são apenas para demonstração. Para adicionar novos
-            produtos, clique no botão "Adicionar Produto" e preencha os detalhes
-            necessários.
-            <br />
-            Os produtos adicionados não são persistidos em um banco de dados
-            real, portanto, ao atualizar a página, os dados serão perdidos.
-            <br />
-            <br />
-            <strong>Pagina apenas para fins de demonstração.</strong>
-          </AlertDescription>
-        </Alert>
       </div>
 
       {/* Main Content */}
@@ -264,7 +293,9 @@ const Console = () => {
                         variant="ghost"
                         size="sm"
                         className="text-red-600 hover:text-red-800 hover:bg-red-50 ml-1"
-                        onClick={() => handleDeleteProduct(product.id)}
+                        onClick={() =>
+                          handleDeleteProduct(product.id, product.name)
+                        }
                       >
                         <Trash2 size={16} />
                       </Button>
@@ -308,6 +339,7 @@ const Console = () => {
                   value={formData.name}
                   onChange={handleInputChange}
                   required
+                  disabled={!!currentProduct}
                 />
               </div>
 
