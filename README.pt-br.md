@@ -202,6 +202,40 @@ Para atribuir usuários a grupos, siga estas etapas:
 
 Seguindo estas etapas, você pode garantir que seu aplicativo esteja devidamente protegido com funções baseadas e que apenas usuários autorizados tenham acesso a rotas protegidas.
 
+## Integração com API Gateway, Lambda e DynamoDB
+
+Utilizamos o comando `amplify add api` para criar uma API e uma função Lambda correspondente que executa operações CRUD em uma tabela do DynamoDB para persistência de dados.
+
+### Principais Destaques
+
+- Utilizou o suporte integrado do AWS Amplify para criação de APIs e funções Lambda.
+- Integrado ao DynamoDB para armazenamento e recuperação eficientes de dados.
+- Simplificou o processo de criação e gerenciamento de APIs e funções Lambda por meio do Amplify.
+
+### Modelo de Dados
+
+```typescript
+type Product = {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  imageUrl?: string;
+};
+```
+
+Este é o modelo de dados usado para armazenar informações de produtos no DynamoDB. O campo `imageUrl` é opcional, permitindo que produtos sem imagens sejam armazenados de forma eficiente.
+
+## Integração com o S3
+
+Utilizamos o comando `amplify add storage` para criar um bucket do S3 e carregar imagens de produtos. O URL da imagem é então armazenado na tabela do DynamoDB, reduzindo a necessidade de consultas frequentes ao S3.
+
+### Principais Destaques
+
+- Utilização do suporte integrado do AWS Amplify para integração com o S3.
+- Simplificação do processo de criação e gerenciamento de buckets do S3 por meio do Amplify.
+- Desempenho aprimorado ao armazenar URLs de imagens no DynamoDB em vez de consultar o S3 com frequência.
+
 ## Benefícios de usar o AWS Amplify
 
 O AWS Amplify oferece um conjunto abrangente de ferramentas e serviços para ajudar você a criar, implantar e gerenciar seu aplicativo. Com o Amplify, você pode aproveitar os seguintes benefícios:
