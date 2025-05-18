@@ -1,0 +1,14 @@
+{
+  "resourceName": "vfscastanhass301",
+  "policyUUID": "c3788de7",
+  "bucketName": "vfscastanhaslandingp4279bc8887c645c6973c971b891",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}

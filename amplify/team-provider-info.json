@@ -23,7 +23,8 @@
         }
       },
       "storage": {
-        "dynamo01vfscastanhas": {}
+        "dynamo01vfscastanhas": {},
+        "vfscastanhass301": {}
       },
       "api": {
         "vfscastanhasapi01": {}

@@ -38,6 +38,10 @@ export type AmplifyDependentResourcesAttributes = {
       "SortKeyName": "string",
       "SortKeyType": "string",
       "StreamArn": "string"
+    },
+    "vfscastanhass301": {
+      "BucketName": "string",
+      "Region": "string"
     }
   }
 }
