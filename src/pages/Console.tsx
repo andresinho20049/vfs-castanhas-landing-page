@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 import { get, post, put, del } from "aws-amplify/api";
+import { getUrl, uploadData } from "aws-amplify/storage";
 
 // Definição do tipo de produto
 interface Product {
@@ -44,6 +45,7 @@ const Console = () => {
     imageUrl: "",
   });
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {
     if (!userInfo) {
@@ -65,6 +67,7 @@ const Console = () => {
         price: product.price.toString(),
         imageUrl: product.imageUrl || "",
       });
+
       setImagePreview(product.imageUrl || null);
     } else {
       setCurrentProduct(null);
@@ -96,7 +99,8 @@ const Console = () => {
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Simular upload com URL de objeto local
+      setFile(file);
+
       const imageUrl = URL.createObjectURL(file);
       setImagePreview(imageUrl);
       setFormData({
@@ -115,8 +119,16 @@ const Console = () => {
         name: formData.name,
         description: formData.description,
         price: parseFloat(formData.price) || 0,
-        imageUrl: formData.imageUrl || imagePreview || undefined,
+        imageUrl: imagePreview || "",
       };
+
+      if (file) {
+        const uploadResult = await handleUploadImageS3(
+          `${newProduct.id}-${newProduct.name}`,
+          file
+        );
+        newProduct.imageUrl = (await handleGetImageS3(uploadResult.path)).href;
+      }
 
       if (!!currentProduct) {
         await handleUpdateProduct(newProduct);
@@ -166,6 +178,26 @@ const Console = () => {
     } else {
       toast.error("Erro ao atualizar produto");
     }
+  };
+
+  const handleUploadImageS3 = async (id: string, file: File) => {
+    const fileName = `${id}-${file.name}`;
+    const filePath = `products/${fileName}`;
+    const uploadResult = await uploadData({
+      path: filePath,
+      data: file,
+      options: {
+        contentType: file.type,
+      },
+    }).result;
+    return uploadResult;
+  };
+
+  const handleGetImageS3 = async (path: string) => {
+    const getImage = await getUrl({
+      path: path,
+    });
+    return getImage.url;
   };
 
   const handleGetAllProduct = async () => {
@@ -369,7 +401,16 @@ const Console = () => {
 
               <div className="space-y-2">
                 <Label htmlFor="image">Imagem do Produto</Label>
-                <div className="flex items-start space-x-4">
+                <div className="flex flex-col items-center space-y-4">
+                  {imagePreview && (
+                    <div>
+                      <img
+                        src={imagePreview}
+                        alt="Preview"
+                        className="h-36 w-36 object-cover rounded border"
+                      />
+                    </div>
+                  )}
                   <div>
                     <Input
                       id="image"
@@ -380,15 +421,6 @@ const Console = () => {
                       className="max-w-xs"
                     />
                   </div>
-                  {(imagePreview || formData.imageUrl) && (
-                    <div>
-                      <img
-                        src={imagePreview || formData.imageUrl}
-                        alt="Preview"
-                        className="h-20 w-20 object-cover rounded border"
-                      />
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
