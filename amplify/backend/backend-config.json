@@ -1,4 +1,20 @@
 {
+  "api": {
+    "vfscastanhasapi01": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "vfscastanhaslandingpa60a863b"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
   "auth": {
     "vfscastanhaslandingpf36c0dfe": {
       "customAuth": false,
@@ -25,6 +41,51 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
+    }
+  },
+  "function": {
+    "vfscastanhaslandingpa60a863b": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributeEnvMap": {
+            "Arn": "TABLE_ARN",
+            "Name": "TABLE_NAME"
+          },
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "dynamo01vfscastanhas"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_vfscastanhaslandingpa60a863b_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "vfscastanhaslandingpa60a863b"
+        }
+      ]
+    },
+    "AMPLIFY_function_vfscastanhaslandingpa60a863b_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "vfscastanhaslandingpa60a863b"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "dynamo01vfscastanhas": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
     }
   }
 }

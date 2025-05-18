@@ -9,11 +9,24 @@
       "UnauthRoleName": "amplify-vfscastanhaslandingp-dev-b81c8-unauthRole",
       "StackName": "amplify-vfscastanhaslandingp-dev-b81c8",
       "StackId": "arn:aws:cloudformation:us-east-1:039287066861:stack/amplify-vfscastanhaslandingp-dev-b81c8/db826920-31f9-11f0-842d-0e29bdd92d97",
-      "AmplifyAppId": "d2crsg2ixs07i2"
+      "AmplifyAppId": "d2crsg2ixs07i2",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-vfscastanhaslandingp-dev-b81c8-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "auth": {
         "vfscastanhaslandingpf36c0dfe": {}
+      },
+      "function": {
+        "vfscastanhaslandingpa60a863b": {
+          "deploymentBucketName": "amplify-vfscastanhaslandingp-dev-b81c8-deployment",
+          "s3Key": "amplify-builds/vfscastanhaslandingpa60a863b-44754e48785845397055-build.zip"
+        }
+      },
+      "storage": {
+        "dynamo01vfscastanhas": {}
+      },
+      "api": {
+        "vfscastanhasapi01": {}
       }
     }
   }
