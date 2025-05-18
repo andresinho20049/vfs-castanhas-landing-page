@@ -1,6 +1,7 @@
 import { fetchAuthSession } from "@aws-amplify/auth";
 import { useAuthenticator } from "@aws-amplify/ui-react";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { useLoading } from "./LoadingContext";
 
 type UserInfoType = {
   id: string;
@@ -30,8 +31,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [userInfo, setUserInfo] = useState<UserInfoType | null>(null);
   const isAuthenticated = useMemo(() => !!userInfo, [userInfo]);
 
+  const { setLoading } = useLoading();
+
   useEffect(() => {
-    // Fetch the auth session and set the user info
+    setLoading(true);
+
     fetchAuthSession()
       .then((session) => {
         const payload = session?.tokens?.idToken?.payload;
@@ -52,6 +56,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         console.error("Error fetching auth session:", error);
 
         setUserInfo(null);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [user]);
 

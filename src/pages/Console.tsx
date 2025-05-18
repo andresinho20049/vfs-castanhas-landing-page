@@ -21,6 +21,7 @@ import { toast } from "sonner";
 
 import { get, post, put, del } from "aws-amplify/api";
 import { getUrl, uploadData } from "aws-amplify/storage";
+import { useLoading } from "@/context/LoadingContext";
 
 // Definição do tipo de produto
 interface Product {
@@ -47,6 +48,8 @@ const Console = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
 
+  const { loading, setLoading } = useLoading();
+
   useEffect(() => {
     if (!userInfo) {
       toast.error("Acesso restrito a administradores");
@@ -55,7 +58,10 @@ const Console = () => {
   }, [userInfo]);
 
   useEffect(() => {
-    handleGetAllProduct();
+    setLoading(true);
+    handleGetAllProduct().finally(() => {
+      setLoading(false);
+    });
   }, []);
 
   const handleOpenForm = (product?: Product) => {
@@ -113,6 +119,7 @@ const Console = () => {
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
+      setLoading(true);
 
       const newProduct: Product = {
         id: currentProduct?.id || Date.now().toString(),
@@ -130,6 +137,7 @@ const Console = () => {
         // concatenate the path to the image URL
         const getImage = await handleGetImageS3(uploadResult.path);
         newProduct.imageUrl = `${getImage.protocol}//${getImage.host}/${uploadResult.path}`;
+        setFile(null);
       }
 
       if (!!currentProduct) {
@@ -137,6 +145,7 @@ const Console = () => {
       } else {
         await handlePostProduct(newProduct);
       }
+      setLoading(false);
       handleCloseForm();
     },
     [products, currentProduct, formData]
@@ -276,6 +285,7 @@ const Console = () => {
             <Button
               onClick={() => handleOpenForm()}
               className="bg-vfs-blue hover:bg-vfs-blue/80"
+              disabled={loading}
             >
               <Plus size={18} className="mr-2" /> Adicionar Produto
             </Button>
@@ -294,6 +304,14 @@ const Console = () => {
                 </tr>
               </thead>
               <tbody>
+                {loading && (
+                  <tr>
+                    <td colSpan={5} className="p-8 text-center text-gray-500">
+                      Carregando produtos...
+                    </td>
+                  </tr>
+                )}
+
                 {products.map((product) => (
                   <tr key={product.id} className="border-b hover:bg-gray-50">
                     <td className="p-4">
@@ -336,7 +354,7 @@ const Console = () => {
                     </td>
                   </tr>
                 ))}
-                {products.length === 0 && (
+                {!loading && products.length === 0 && (
                   <tr>
                     <td colSpan={5} className="p-8 text-center text-gray-500">
                       Nenhum produto cadastrado.
@@ -436,6 +454,7 @@ const Console = () => {
               <Button
                 type="submit"
                 className="bg-vfs-blue hover:bg-vfs-blue/80"
+                disabled={loading}
               >
                 {currentProduct ? "Atualizar Produto" : "Cadastrar Produto"}
               </Button>

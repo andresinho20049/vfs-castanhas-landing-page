@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
+import { useLoading } from "@/context/LoadingContext";
 import { ArrowLeft } from "lucide-react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +9,7 @@ import { toast } from "sonner";
 
 const Perfil = () => {
   const { userInfo } = useAuth();
+  const { loading } = useLoading();
 
   const navigate = useNavigate();
 
@@ -55,7 +57,11 @@ const Perfil = () => {
       {/* Main Content */}
       <div className="container mx-auto px-4 py-6">
         {/* User Info */}
-        <div className="bg-white shadow-md rounded-lg p-6 mb-6">
+        <div
+          className={`bg-white shadow-md rounded-lg p-6 mb-6 ${
+            loading ? "hidden" : ""
+          }`}
+        >
           <h2 className="text-2xl font-bold mb-4">Informações do Usuário</h2>
           <div className="flex items-center space-x-4 mb-4">
             <Avatar>

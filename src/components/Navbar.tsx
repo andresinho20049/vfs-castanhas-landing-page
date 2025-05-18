@@ -13,6 +13,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuthenticator } from "@aws-amplify/ui-react";
 import { useAuth } from "@/context/AuthContext";
+import { useLoading } from "@/context/LoadingContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,6 +21,8 @@ const Navbar = () => {
   const { userInfo, isAuthenticated } = useAuth();
   const { user, signOut } = useAuthenticator();
   const navigate = useNavigate();
+
+  const { loading } = useLoading();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,7 +45,6 @@ const Navbar = () => {
 
   const handleLogout = () => {
     signOut(user);
-    navigate("/");
   };
 
   const navLinks = [
@@ -137,6 +139,7 @@ const Navbar = () => {
             <Button
               className="bg-vfs-blue hover:bg-vfs-blue/80 text-white"
               onClick={() => navigate("/login")}
+              disabled={loading}
             >
               Entrar
             </Button>

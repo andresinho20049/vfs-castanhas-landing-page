@@ -6,6 +6,7 @@ import { Bold, Italic, List, MessageSquare, User } from "lucide-react";
 import React, { useState } from "react";
 import { toast } from "sonner";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import { useLoading } from "@/context/LoadingContext";
 
 // Tipo para os comentários
 interface Comment {
@@ -66,7 +67,8 @@ const Comments = () => {
   const { userInfo, isAuthenticated } = useAuth();
   const [comments, setComments] = useState<Comment[]>(initialComments);
   const [newComment, setNewComment] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { loading, setLoading } = useLoading();
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNewComment(e.target.value);
@@ -78,7 +80,7 @@ const Comments = () => {
       return;
     }
 
-    setIsSubmitting(true);
+    setLoading(true);
 
     // Simular envio para o servidor
     setTimeout(() => {
@@ -94,7 +96,7 @@ const Comments = () => {
       setComments([comment, ...comments]);
       setNewComment("");
       toast.success("Comentário publicado com sucesso!");
-      setIsSubmitting(false);
+      setLoading(false);
     }, 500);
   };
 
@@ -220,11 +222,11 @@ const Comments = () => {
                 <Button
                   type="button"
                   onClick={handleSubmitComment}
-                  disabled={isSubmitting || !newComment.trim()}
+                  disabled={loading || !newComment.trim()}
                   className="bg-vfs-blue hover:bg-vfs-blue/80"
                 >
                   <MessageSquare size={18} className="mr-2" />
-                  {isSubmitting ? "Publicando..." : "Publicar Comentário"}
+                  {loading ? "Publicando..." : "Publicar Comentário"}
                 </Button>
               </div>
             </div>
@@ -237,6 +239,7 @@ const Comments = () => {
             <Button
               onClick={() => (window.location.href = "/login")}
               className="bg-vfs-blue hover:bg-vfs-blue/80"
+              disabled={loading}
             >
               <User size={18} className="mr-2" /> Entrar para comentar
             </Button>
