@@ -127,7 +127,9 @@ const Console = () => {
           `${newProduct.id}-${newProduct.name}`,
           file
         );
-        newProduct.imageUrl = (await handleGetImageS3(uploadResult.path)).href;
+        // concatenate the path to the image URL
+        const getImage = await handleGetImageS3(uploadResult.path);
+        newProduct.imageUrl = `${getImage.protocol}//${getImage.host}/${uploadResult.path}`;
       }
 
       if (!!currentProduct) {
