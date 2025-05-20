@@ -13,6 +13,19 @@
           "delete"
         ]
       }
+    },
+    "/ai": {
+      "name": "/ai",
+      "lambdaFunction": "vfscastanhasaimodel01",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
     }
   }
 }

@@ -20,6 +20,10 @@
         "vfscastanhaslandingpa60a863b": {
           "deploymentBucketName": "amplify-vfscastanhaslandingp-dev-b81c8-deployment",
           "s3Key": "amplify-builds/vfscastanhaslandingpa60a863b-44754e48785845397055-build.zip"
+        },
+        "vfscastanhasaimodel01": {
+          "deploymentBucketName": "amplify-vfscastanhaslandingp-dev-b81c8-deployment",
+          "s3Key": "amplify-builds/vfscastanhasaimodel01-704c364d4c4c76436c4b-build.zip"
         }
       },
       "storage": {

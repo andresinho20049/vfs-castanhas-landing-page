@@ -20,6 +20,13 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "function": {
+    "vfscastanhasaimodel01": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
     "vfscastanhaslandingpa60a863b": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
