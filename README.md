@@ -13,6 +13,26 @@ This repository includes pre-configured tools and features to streamline develop
 - **Routing**: Implemented with React Router for seamless navigation.
 - **Customizable UI**: Built with Tailwind CSS and shadcn-ui for a consistent and flexible design system.
 
+## Application Architecture
+
+This web project was developed using **AWS Amplify**, providing a robust and scalable architecture, with a focus on the integration of serverless services to optimize costs and performance. **React** was the choice for the front-end, ensuring a dynamic and responsive user experience.
+
+![Diagrama](/public/diagram/ArquitectureDiagram.drawio.png)
+
+### Frontend and Authentication
+
+The user interface is built in **React**, with a **Landing Page** in the root route (`/`). To ensure security and access management, user authentication is performed through **AWS Cognito**, configured with the `amplify add auth` command. This allows only logged-in users to access the `/profile` route and users with the `admin` role to have exclusive access to the `/console` route.
+
+### Backend and APIs
+
+The backend backbone is composed of **AWS Lambda Functions**, accessible through a single **API Gateway** configured with REST architecture. Each backend functionality is mapped to a specific route in the API Gateway, which directs requests to the corresponding Lambda Function.
+
+- **Product Registration (`/products`):** The product registration functionality on the console screen uses an **AWS Lambda Function (`vfscastanhaslandingpa60a863b`)** for CRUD (Create, Read, Update, Delete) operations on a **DynamoDB table (`dynamo01vfscastanhas`)**. Product images are stored in **AWS S3 (`vfscastanhass301`)**, and their URLs are saved in DynamoDB.
+
+- **AI Integration (`/ai`):** An **AWS Lambda Function (`vfscastanhasaimodel01`)** manages the integration with **Amazon Bedrock**, AWS's generative AI service. This function allows user interaction with the chatbot.
+
+- **Chatbot (`/chat`):** Conversations between the user and the chatbot are persisted in a dedicated **DynamoDB table (`dynamo01vfscastanhaschatbot`)**, allowing the history of interactions, the **AWS Lambda Function (`vfscastanhaschatbot`)** retrieves the conversation history after the user enters the portal.
+
 ## Project info
 
 This project was bootstrapped with Lovable
@@ -226,11 +246,35 @@ This is the data model used for storing product information in DynamoDB. The `im
 
 We utilized the `amplify add storage` command to create an S3 bucket and upload product images. The image URL is then stored in the DynamoDB table, reducing the need for frequent S3 queries.
 
-### Key Highlights
+## Chatbot Functionality with Amazon Bedrock: Empowering Engagement
 
-- Utilized AWS Amplify's built-in support for S3 integration.
-- Simplified the process of creating and managing S3 buckets through Amplify.
-- Improved performance by storing image URLs in DynamoDB instead of querying S3 frequently.
+This application includes a chatbot module that, as an **(MVP)**, demonstrates the potential of artificial intelligence to optimize user interaction and, in the future, support VFS Castanhas operations. The integration with **Amazon Bedrock** establishes a foundation for future expansions and enhancements.
+
+### Business Overview and Potential (MVP)
+
+In the context of an MVP, the chatbot acts as an initial and informative point of contact. It offers:
+
+- **Basic Availability:** Allows users to obtain fundamental information, such as address and contact (WhatsApp), in an automated way.
+- **First Impressions:** Although in the initial phase, the presence of a virtual assistant already improves the perception of modernity and accessibility of the business.
+- **Validation of Interest:** Interaction with the chatbot can help validate users' interest in automated communication channels, providing initial data for future product decisions.
+- **Base for Evolution:** The serverless architecture already implemented allows the functionality to be easily expanded to meet more complex scenarios, such as dynamic FAQs, order support or advanced personalization.
+
+### Technical Details: Architecture and Implementation
+
+The chatbot functionality is implemented using AWS serverless services, ensuring scalability and efficiency from the MVP:
+
+1. **Frontend (React):** The chatbot interface in React collects the user's message and sends it to the backend.
+2. **API Gateway and AWS Lambda:** Messages are routed via API Gateway to an AWS Lambda function. This Lambda is the central orchestrator.
+
+   - **User ID Extraction:** To contextualize the conversations, Lambda tries to extract the `userid` from the AWS Cognito authentication context (`event['requestContext']['identity']['cognitoAuthenticationProvider']`). This ID is essential to associate the message history with each user.
+   - **Interaction Persistence (DynamoDB):** All messages, both from the user and the assistant's responses, are persisted in a dedicated DynamoDB table (`dynamo01vfscastanhaschatbot`). The `persist_data` function uses an `UpdateExpression` operation to add new messages to an existing list or create a new record for the user. For the `/chat` route, Lambda can also perform `GET` operations on this DynamoDB table to retrieve the user's conversation history.
+
+3. **Integration with Amazon Bedrock:**
+
+   - **Model Invocation:** Lambda uses `boto3` to interact with Amazon Bedrock Runtime. The `amazon.nova-micro-v1:0` model is invoked with a JSON payload that includes the user's message and a `system_prompt`. The `system_prompt` defines the basic persona of the chatbot ("Cajuzinho") and injects static information, such as the address and WhatsApp number.
+   - **Response Processing:** The response from Bedrock is read and the text content is extracted to be sent back to the frontend and also persisted in DynamoDB as the assistant response.
+
+This architecture allows the chatbot to function autonomously for basic queries, serving as a functional proof of concept and a solid foundation for future iterations and more complex AI-based functionality.
 
 ## Benefits of Using AWS Amplify
 
