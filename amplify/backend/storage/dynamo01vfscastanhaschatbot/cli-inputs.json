@@ -1,0 +1,10 @@
+{
+  "resourceName": "dynamo01vfscastanhaschatbot",
+  "tableName": "dynamo01vfscastanhaschatbot",
+  "partitionKey": {
+    "fieldName": "userid",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

@@ -27,6 +27,13 @@ export type AmplifyDependentResourcesAttributes = {
       "Name": "string",
       "Region": "string"
     },
+    "vfscastanhaschatbot": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
     "vfscastanhaslandingpa60a863b": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
@@ -44,6 +51,14 @@ export type AmplifyDependentResourcesAttributes = {
       "Region": "string",
       "SortKeyName": "string",
       "SortKeyType": "string",
+      "StreamArn": "string"
+    },
+    "dynamo01vfscastanhaschatbot": {
+      "Arn": "string",
+      "Name": "string",
+      "PartitionKeyName": "string",
+      "PartitionKeyType": "string",
+      "Region": "string",
       "StreamArn": "string"
     },
     "vfscastanhass301": {

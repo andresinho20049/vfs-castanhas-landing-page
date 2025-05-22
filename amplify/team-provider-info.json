@@ -19,16 +19,21 @@
       "function": {
         "vfscastanhaslandingpa60a863b": {
           "deploymentBucketName": "amplify-vfscastanhaslandingp-dev-b81c8-deployment",
-          "s3Key": "amplify-builds/vfscastanhaslandingpa60a863b-44754e48785845397055-build.zip"
+          "s3Key": "amplify-builds/vfscastanhaslandingpa60a863b-35666f463769336e6a55-build.zip"
         },
         "vfscastanhasaimodel01": {
           "deploymentBucketName": "amplify-vfscastanhaslandingp-dev-b81c8-deployment",
-          "s3Key": "amplify-builds/vfscastanhasaimodel01-704c364d4c4c76436c4b-build.zip"
+          "s3Key": "amplify-builds/vfscastanhasaimodel01-6f546c356533784f624b-build.zip"
+        },
+        "vfscastanhaschatbot": {
+          "deploymentBucketName": "amplify-vfscastanhaslandingp-dev-b81c8-deployment",
+          "s3Key": "amplify-builds/vfscastanhaschatbot-394a3268644c38346279-build.zip"
         }
       },
       "storage": {
         "dynamo01vfscastanhas": {},
-        "vfscastanhass301": {}
+        "vfscastanhass301": {},
+        "dynamo01vfscastanhaschatbot": {}
       },
       "api": {
         "vfscastanhasapi01": {}

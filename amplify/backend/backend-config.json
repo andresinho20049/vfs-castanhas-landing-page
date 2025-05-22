@@ -17,6 +17,14 @@
           ],
           "category": "function",
           "resourceName": "vfscastanhasaimodel01"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "vfscastanhaschatbot"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -57,6 +65,25 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "vfscastanhaschatbot": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributeEnvMap": {
+            "Arn": "TABLE_ARN",
+            "Name": "TABLE_NAME"
+          },
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "dynamo01vfscastanhaschatbot"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "vfscastanhaslandingpa60a863b": {
       "build": true,
       "dependsOn": [
@@ -77,8 +104,62 @@
       "service": "Lambda"
     }
   },
+  "parameters": {
+    "AMPLIFY_function_vfscastanhasaimodel01_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "vfscastanhasaimodel01"
+        }
+      ]
+    },
+    "AMPLIFY_function_vfscastanhasaimodel01_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "vfscastanhasaimodel01"
+        }
+      ]
+    },
+    "AMPLIFY_function_vfscastanhaschatbot_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "vfscastanhaschatbot"
+        }
+      ]
+    },
+    "AMPLIFY_function_vfscastanhaschatbot_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "vfscastanhaschatbot"
+        }
+      ]
+    },
+    "AMPLIFY_function_vfscastanhaslandingpa60a863b_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "vfscastanhaslandingpa60a863b"
+        }
+      ]
+    },
+    "AMPLIFY_function_vfscastanhaslandingpa60a863b_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "vfscastanhaslandingpa60a863b"
+        }
+      ]
+    }
+  },
   "storage": {
     "dynamo01vfscastanhas": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
+    },
+    "dynamo01vfscastanhaschatbot": {
       "providerPlugin": "awscloudformation",
       "service": "DynamoDB"
     },
