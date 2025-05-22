@@ -5,20 +5,20 @@ import { TooltipProvider } from "./components/ui/tooltip";
 import { AuthProvider } from "./context/AuthContext";
 import { AppRoutes } from "./routes/Routes";
 import { LoadingProvider } from "./context/LoadingContext";
-import { AiChatProvider } from "./context/AiChatContext";
+import { ChatBotProvider } from "./context/ChatBotContext";
 
 export default function App() {
   return (
     <Authenticator.Provider>
       <LoadingProvider>
         <AuthProvider>
-          <AiChatProvider>
+          <ChatBotProvider>
             <TooltipProvider>
               <Toaster />
               <Sonner />
               <AppRoutes />
             </TooltipProvider>
-          </AiChatProvider>
+          </ChatBotProvider>
         </AuthProvider>
       </LoadingProvider>
     </Authenticator.Provider>

@@ -1,55 +1,56 @@
+import { useChatBot } from "@/context/ChatBotContext";
+import { handleAiModelInvoke } from "@/lib/ai";
 import { FormEvent, useState } from "react";
 import { Button } from "./ui/button";
-import { handleAiModelInvoke } from "@/lib/ai";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
 import { Card, CardTitle } from "./ui/card";
+import { Textarea } from "./ui/textarea";
+import { ChatMessageType } from "@/models/ChatBot";
+import { useLoading } from "@/context/LoadingContext";
+import { Placeholder } from "@aws-amplify/ui-react";
 
 export const SimpleAiChatComponent = () => {
-  const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+
+  const { messages, handleSendChatBotMessage } = useChatBot();
+  const { loading } = useLoading();
+
+  const { setIsOpen } = useChatBot();
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!newMessage.trim()) return;
 
-    const message = {
-      text: newMessage,
-      type: "user", // ou 'system'
-    };
-
-    setMessages((prevMessages) => [...prevMessages, message]);
-
-    handleAiModelInvoke(newMessage).then((res) => {
-      if (res.statusCode !== 200) {
-        throw new Error("Error invoking AI model");
-      }
-      const response = res.body;
-      const aiMessage = {
-        text: response,
-        type: "system",
-      };
-      setMessages((prevMessages) => [...prevMessages, aiMessage]);
-    });
-
+    handleSendChatBotMessage(newMessage);
     setNewMessage("");
   };
 
   return (
-    <Card title="Chat AI" className="fixed bottom-10 right-10 bg-rose-50">
-      <div className="flex flex-col h-full w-full p-4">
-        <CardTitle className="text-lg font-semibold">Chat com AI</CardTitle>
-        <div className="flex h-72 w-64 scroll-y overflow-y-auto flex-col gap-2 bg-white rounded-lg">
+    <Card title="Chat AI" className="fixed bottom-10 right-10 z-50 ">
+      <div className="flex flex-col h-full w-full p-4 space-y-2">
+        <CardTitle className="flex text-sm font-semibold justify-between items-center border-b-2 border-gray-300 ">
+          <h2 className="text-xl text-vfs-brown">Chat AI</h2>
+          <Button
+            variant="link"
+            className="hover:text-red-600 text-xl font-bold"
+            onClick={() => setIsOpen(false)}
+          >
+            X
+          </Button>
+        </CardTitle>
+        <div className="flex flex-col gap-2 py-2 h-72 w-80 scroll-y overflow-y-auto rounded-lg">
           {messages.map((message, index) => (
-            <p
+            <div
               key={index}
-              className={`message ${
-                message.type === "user" ? "bg-green right" : "bg-gray left"
+              className={`flex max-w-64 p-2 rounded-lg ${
+                message.type === "user"
+                  ? "bg-green-100 self-end"
+                  : "bg-gray-200 self-start"
               }`}
             >
-              {message.text}
-            </p>
+              <p className="text-sm">{message.text}</p>
+            </div>
           ))}
+          <Placeholder isLoaded={!loading} className="max-w-64 self-start" />
         </div>
 
         <form
@@ -58,6 +59,7 @@ export const SimpleAiChatComponent = () => {
         >
           <Textarea
             // type="text"
+            className="resize-none rounded-md w-full h-24"
             title="Mensagem"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
@@ -67,7 +69,7 @@ export const SimpleAiChatComponent = () => {
           <Button
             disabled={!newMessage.trim()}
             type="submit"
-            className="bg-green-500 text-white w-full"
+            className="bg-vfs-green text-white w-full"
           >
             Enviar
           </Button>
