@@ -38,8 +38,7 @@ export const ChatBotProvider = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { isAuthenticated, userInfo } = useAuth();
-  const userId = useMemo(() => userInfo?.id, [userInfo]);
+  const { isAuthenticated } = useAuth();
 
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
 
@@ -52,22 +51,20 @@ export const ChatBotProvider = ({
     }
 
     setLoading(true);
-    getAiMessages(userId)
+    getAiMessages()
       .then((response) => {
-        response
-          .filter((item) => item.userid === userId)
-          .forEach((item) => {
-            const chatMessages = item.messages.map((message) => ({
-              text: message.text,
-              type: message.type,
-            }));
-            setMessages(chatMessages);
-          });
+        response.forEach((item) => {
+          const chatMessages = item.messages.map((message) => ({
+            text: message.text,
+            type: message.type,
+          }));
+          setMessages(chatMessages);
+        });
       })
       .finally(() => {
         setLoading(false);
       });
-  }, [isAuthenticated, userId]);
+  }, [isAuthenticated]);
 
   const handleSendChatBotMessage = (message: string) => {
     const newMessage: ChatMessageType = {

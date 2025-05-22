@@ -26,10 +26,10 @@ export const handleAiModelInvoke = async (prompt: string): Promise<ResponseAiTyp
     return data as unknown as ResponseAiType;
 }
 
-export const getAiMessages = async (userId: string) => {
+export const getAiMessages = async () => {
   const response = await get({
     apiName: "vfscastanhasapi01",
-    path: `/chat/${userId}`,
+    path: `/chat`,
   }).response;
 
   const statusCode = response.statusCode;

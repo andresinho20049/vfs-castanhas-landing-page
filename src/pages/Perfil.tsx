@@ -72,7 +72,6 @@ const Perfil = () => {
             </Avatar>
             <div>
               <h3 className="text-xl font-semibold">{userInfo.email}</h3>
-              <p className="text-sm text-gray-500">Nome: {userInfo.id}</p>
               <p className="text-sm text-gray-500">
                 Grupos: {userInfo.roles.join(", ")}
               </p>
